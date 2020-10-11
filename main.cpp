@@ -4,6 +4,31 @@ using namespace std;
 #define block_w 4
 #define block_h 4
 
+int blocktype[20][block_h][block_w] = 
+{
+    {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 0},{0, 1, 0, 0}},
+    {{0, 0, 0, 0},{0, 1, 0, 0},{1, 1, 0, 0},{0, 1, 0, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{0, 1, 0, 0},{1, 1, 1, 0}},
+    {{0, 0, 0, 0},{1, 0, 0, 0},{1, 1, 0, 0},{1, 0, 0, 0}},
+    {{0, 0, 0, 0},{1, 0, 0, 0},{1, 0, 0, 0},{1, 1, 0, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 1},{1, 0, 0, 0}},
+    {{0, 0, 0, 0},{1, 1, 0, 0},{0, 1, 0, 0},{0, 1, 0, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 1, 0},{1, 1, 1, 0}},
+    {{0, 0, 0, 0},{0, 1, 0, 0},{0, 1, 0, 0},{1, 1, 0, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{1, 0, 0, 0},{1, 1, 1, 0}},
+    {{0, 0, 0, 0},{1, 1, 0, 0},{1, 0, 0, 0},{1, 0, 0, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 0},{0, 0, 1, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{0, 1, 1, 0},{1, 1, 0, 0}},
+    {{0, 0, 0, 0},{1, 0, 0, 0},{1, 1, 0, 0},{0, 1, 0, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 0, 0},{0, 1, 1, 0}},
+    {{0, 0, 0, 0},{0, 1, 0, 0},{1, 1, 0, 0},{1, 0, 0, 0}},
+    {{1, 0, 0, 0},{1, 0, 0, 0},{1, 0, 0, 0},{1, 0, 0, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 1}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 0, 0},{1, 1, 0, 0}},
+    {{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0}}
+};
+string t[19] = { "T1","T2","T3","T4","L1","L2","L3","L4","J1","J2","J3","J4","S1","S2","Z1","Z2","I1","I2","O"};
+
 class Block {
 public:
     string type;
@@ -11,260 +36,19 @@ public:
     Block(){}
     Block(string name) 
     {
-        if (name == "T1") 
-        {
-            int bk[block_h][block_w] = 
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {1, 1, 1, 0},
-                {0, 1, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "T2")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 1, 0, 0},
-                {1, 1, 0, 0},
-                {0, 1, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "T3")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {0, 1, 0, 0},
-                {1, 1, 1, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "T4")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {1, 0, 0, 0},
-                {1, 1, 0, 0},
-                {1, 0, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "L1")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {1, 0, 0, 0},
-                {1, 0, 0, 0},
-                {1, 1, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "L2")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {1, 1, 1, 1},
-                {1, 0, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "L3")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {1, 1, 0, 0},
-                {0, 1, 0, 0},
-                {0, 1, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "L4")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {0, 0, 1, 0},
-                {1, 1, 1, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "J1")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 1, 0, 0},
-                {0, 1, 0, 0},
-                {1, 1, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "J2")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {1, 0, 0, 0},
-                {1, 1, 1, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "J3")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {1, 1, 0, 0},
-                {1, 0, 0, 0},
-                {1, 0, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "J4")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {1, 1, 1, 0},
-                {0, 0, 1, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "S1")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {0, 1, 1, 0},
-                {1, 1, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "S2")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {1, 0, 0, 0},
-                {1, 1, 0, 0},
-                {0, 1, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "Z1")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {1, 1, 0, 0},
-                {0, 1, 1, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "Z2")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 1, 0, 0},
-                {1, 1, 0, 0},
-                {1, 0, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "I1")
-        {
-            int bk[block_h][block_w] =
-            {
-                {1, 0, 0, 0},
-                {1, 0, 0, 0},
-                {1, 0, 0, 0},
-                {1, 0, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "I2")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {1, 1, 1, 1}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else if (name == "I2")
-        {
-            int bk[block_h][block_w] =
-            {
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {1, 1, 0, 0},
-                {1, 1, 0, 0}
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = bk[i][j];
-        }
-        else {
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    data[i][j] = 0;
-        }
+        for (int i = 0; i < 19; i++)
+            if (name == t[i])
+                getdata(i);
+    }
+    ~Block(){}
+    void getdata(int value)
+    {
+        for (int h = 0; h < 4; h++)
+            for (int w = 0; w < 4; w++)
+                data[h][w] = blocktype[value][h][w];
     }
 };
+
 class map {
 public:
     int MapWidth, MapHeight;
@@ -281,7 +65,6 @@ int main()
             cout << block1.data[i][j];
         cout << '\n';
     }
-        
-    
+    return 0;
 }
 

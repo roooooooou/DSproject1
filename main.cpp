@@ -41,6 +41,14 @@ public:
             if (name == t[i])
                 getdata(i);
     }
+    Block(const Block& block)
+    {
+        Pos_x = block.Pos_x;
+        Pos_y = block.Pos_y;
+        for (int i = 0; i < block_h; i++)
+            for (int j = 0; j < block_w; j++)
+                data[i][j] = block.data[i][j];
+    }
     ~Block(){}
     void getdata(int value)
     {
@@ -59,10 +67,10 @@ public:
     Map() { MapWidth = 0; MapHeight = 0; **map = NULL; }
     Map(int H, int W) :MapWidth(W), MapHeight(H)
     {
-        map = new int* [H];
+        map = new int* [H+1];
         for (int i = 0; i <= H; i++)
         {
-            map[i] = new int[W];
+            map[i] = new int[W+1];
             for (int j = 0; j <= W; j++)
                 map[i][j] = 0;
         }
@@ -94,11 +102,19 @@ public:
     }
     void updateMap(Block& block)
     {
-
+        for (int i = 0; i < block_h; i++)
+        {
+            for(int j = 0; j < block_w; j++)
+            {
+                if (block.data[i][j] == 0) continue;
+                map[block.Pos_y - i][block.Pos_x + j] = 1;
+            }
+        }
+        clearLine();
     }
     void clearLine()
     {
-        for (int i = MapHeight; i > 0; i++)
+        for (int i = MapHeight; i > 0; i--)
         {
             bool full = true;
             for (int j = 1; j <= MapWidth; j++)
@@ -113,10 +129,10 @@ public:
             {
                 for (int k = i; k >= 1; k--)
                 {
-                    for (int j = 0; j <= MapWidth; j++)
+                    for (int j = 1; j <= MapWidth; j++)
                         map[k][j] = map[k - 1][j];
                 }
-                for (int k = 0; k <= MapWidth; k++)
+                for (int k = 1; k <= MapWidth; k++)
                     map[1][k] = 0;
             }
         }
@@ -134,8 +150,8 @@ int main()
 
     file.open(filename.c_str(), ios::in);
     file >> h >> w;
-    Map Tetris(h+1, w+1);
-
+    Map Tetris(h, w);
+    bool gameover = false;
     while (file >> testcase)
     {
         if (testcase == "End")
@@ -148,6 +164,7 @@ int main()
             int StartPos, Move;
             file >> StartPos >> Move;
             Block newblock(testcase, StartPos, 0);
+
             Tetris.blockFall(newblock);
             newblock.Pos_x += Move;
             Tetris.blockFall(newblock);

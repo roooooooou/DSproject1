@@ -34,7 +34,7 @@ public:
         {{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0}}};
     string t[19] = { "T1","T2","T3","T4","L1","L2","L3","L4","J1","J2","J3","J4","S1","S2","Z1","Z2","I1","I2","O" };
     Block(){}
-    Block(string name, int y, int x) 
+    Block(string name, int x, int y) 
     {
         Pos_x = x; Pos_y = y;
         for (int i = 0; i < 19; i++)
@@ -51,10 +51,12 @@ public:
 };
 
 class Map {
+    friend Block;
 public:
     int MapWidth, MapHeight;
     int** map;
-    Map(){}
+    bool gameover = false;
+    Map() { MapWidth = 0; MapHeight = 0; **map = NULL; }
     Map(int H, int W) :MapWidth(W), MapHeight(H)
     {
         map = new int* [H];
@@ -65,7 +67,47 @@ public:
                 map[i][j] = 0;
         }
     }
+    void blockFall(Block& block)
+    {     
+        int next_Y = block.Pos_y + 1;
+        bool stop = false;
+        for (int i = 0; i <= MapHeight; i++)
+        {
+            if (next_Y > MapHeight)
+            {
+                stop = true;
+                break;
+            }      
+            for (int j = 0; j < block_h; j++)
+            {
+                if (stop) break;
+                for (int k = 0; k < block_w; k++)
+                {
+                    if (block.data[j][k] == 0) continue;
+                    if (map[next_Y - j][block.Pos_x + k] == 1)
+                    {
+                        stop = true;
+                        break;
+                    }
+                }
+            }
+            if (!stop) block.Pos_y = next_Y;
+        }
+    }
+    bool checkBarrier()
+    {
+
+    }
+    void updateMap()
+    {
+
+    }
+    void clearLine()
+    {
+
+    }
 };
+
 
 int main()
 {
@@ -76,7 +118,7 @@ int main()
     string testcase;
 
     file.open(filename.c_str(), ios::in);
-    file >> w >> h;
+    file >> h >> w;
     Map Tetris(h+1, w+1);
 
     while (file >> testcase)
@@ -85,15 +127,28 @@ int main()
         {
             file.close();
             break;
-        }  
+        }
+
         else
         {
             int StartPos, Move;
             file >> StartPos >> Move;
-            Block newblock(testcase, 0, StartPos);
+            Block newblock(testcase, StartPos, 0);
+            Tetris.blockFall(newblock);
+            newblock.Pos_x += Move;
+            Tetris.blockFall(newblock);
         }
     }
+    fstream final;
 
+    final.open("final.final", ios::out);
+    for (int i = 0; i < h; i++)
+    {
+        for (int j = 0; j < w; j++)
+            final << Tetris.map[i][j] << ' ';
+        final << '\n';
+    }  
+            
     return 0;
 }
 

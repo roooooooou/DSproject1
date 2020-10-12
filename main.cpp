@@ -60,30 +60,23 @@ public:
     Map(int H, int W) :MapWidth(W), MapHeight(H)
     {
         map = new int* [H];
-        for (int i = 0; i < H; i++)
+        for (int i = 0; i <= H; i++)
         {
             map[i] = new int[W];
-            for (int j = 0; j < W; j++)
+            for (int j = 0; j <= W; j++)
                 map[i][j] = 0;
         }
     }
     void blockFall(Block& block)
     {     
-        for (int i = 0; i <= MapHeight; i++)
-        {
-            bool stop = false;
-            stop = checkBarrier(block.Pos_y+1, block);
-            if (!stop)
-                block.Pos_y++;
-            else
-                break;
-        }
+        while(checkBarrier(block.Pos_y + 1, block))
+            block.Pos_y++;
     }
     bool checkBarrier(int next_y, Block& block)
     {
-        bool stop = false;
+        bool stop = true;
         if (next_y > MapHeight)
-            stop = true;
+            stop = false;
         for (int j = 0; j < block_h; j++)
         {
             if (stop) break;
@@ -92,20 +85,41 @@ public:
                 if (block.data[j][k] == 0) continue;
                 if (map[next_y - j][block.Pos_x + k] == 1)
                 {
-                    stop = true;
+                    stop = false;
                     break;
                 }
             }
         }
         return stop;
     }
-    void updateMap()
+    void updateMap(Block& block)
     {
 
     }
     void clearLine()
     {
-
+        for (int i = MapHeight; i > 0; i++)
+        {
+            bool full = true;
+            for (int j = 1; j <= MapWidth; j++)
+            {
+                if (map[i][j] != 1)
+                {
+                    full = false;
+                    break;
+                }
+            }
+            if (full)
+            {
+                for (int k = i; k >= 1; k--)
+                {
+                    for (int j = 0; j <= MapWidth; j++)
+                        map[k][j] = map[k - 1][j];
+                }
+                for (int k = 0; k <= MapWidth; k++)
+                    map[1][k] = 0;
+            }
+        }
     }
 };
 
@@ -129,7 +143,6 @@ int main()
             file.close();
             break;
         }
-
         else
         {
             int StartPos, Move;
@@ -138,14 +151,15 @@ int main()
             Tetris.blockFall(newblock);
             newblock.Pos_x += Move;
             Tetris.blockFall(newblock);
+            Tetris.updateMap(newblock);
         }
     }
     fstream final;
 
     final.open("final.final", ios::out);
-    for (int i = 0; i < h; i++)
+    for (int i = 1; i <= h; i++)
     {
-        for (int j = 0; j < w; j++)
+        for (int j = 1; j <= w; j++)
             final << Tetris.map[i][j] << ' ';
         final << '\n';
     }  

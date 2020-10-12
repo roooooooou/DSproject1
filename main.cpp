@@ -69,34 +69,35 @@ public:
     }
     void blockFall(Block& block)
     {     
-        int next_Y = block.Pos_y + 1;
-        bool stop = false;
         for (int i = 0; i <= MapHeight; i++)
         {
-            if (next_Y > MapHeight)
-            {
-                stop = true;
+            bool stop = false;
+            stop = checkBarrier(block.Pos_y+1, block);
+            if (!stop)
+                block.Pos_y++;
+            else
                 break;
-            }      
-            for (int j = 0; j < block_h; j++)
-            {
-                if (stop) break;
-                for (int k = 0; k < block_w; k++)
-                {
-                    if (block.data[j][k] == 0) continue;
-                    if (map[next_Y - j][block.Pos_x + k] == 1)
-                    {
-                        stop = true;
-                        break;
-                    }
-                }
-            }
-            if (!stop) block.Pos_y = next_Y;
         }
     }
-    bool checkBarrier()
+    bool checkBarrier(int next_y, Block& block)
     {
-
+        bool stop = false;
+        if (next_y > MapHeight)
+            stop = true;
+        for (int j = 0; j < block_h; j++)
+        {
+            if (stop) break;
+            for (int k = 0; k < block_w; k++)
+            {
+                if (block.data[j][k] == 0) continue;
+                if (map[next_y - j][block.Pos_x + k] == 1)
+                {
+                    stop = true;
+                    break;
+                }
+            }
+        }
+        return stop;
     }
     void updateMap()
     {

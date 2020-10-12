@@ -12,16 +12,16 @@ public:
     int Pos_x, Pos_y;
     int data[block_h][block_w] = {0};
     int blocktype[20][block_h][block_w] = {
-        {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 0},{0, 1, 0, 0}},
-        {{0, 0, 0, 0},{0, 1, 0, 0},{1, 1, 0, 0},{0, 1, 0, 0}},
-        {{0, 0, 0, 0},{0, 0, 0, 0},{0, 1, 0, 0},{1, 1, 1, 0}},
-        {{0, 0, 0, 0},{1, 0, 0, 0},{1, 1, 0, 0},{1, 0, 0, 0}},
-        {{0, 0, 0, 0},{1, 0, 0, 0},{1, 0, 0, 0},{1, 1, 0, 0}},
-        {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 1},{1, 0, 0, 0}},
-        {{0, 0, 0, 0},{1, 1, 0, 0},{0, 1, 0, 0},{0, 1, 0, 0}},
-        {{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 1, 0},{1, 1, 1, 0}},
-        {{0, 0, 0, 0},{0, 1, 0, 0},{0, 1, 0, 0},{1, 1, 0, 0}},
-        {{0, 0, 0, 0},{0, 0, 0, 0},{1, 0, 0, 0},{1, 1, 1, 0}},
+        {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 0},{0, 1, 0, 0}}, //T1
+        {{0, 0, 0, 0},{0, 1, 0, 0},{1, 1, 0, 0},{0, 1, 0, 0}}, //T2
+        {{0, 0, 0, 0},{0, 0, 0, 0},{0, 1, 0, 0},{1, 1, 1, 0}}, //T3
+        {{0, 0, 0, 0},{1, 0, 0, 0},{1, 1, 0, 0},{1, 0, 0, 0}}, //T4
+        {{0, 0, 0, 0},{1, 0, 0, 0},{1, 0, 0, 0},{1, 1, 0, 0}}, //L1
+        {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 1},{1, 0, 0, 0}}, //L2
+        {{0, 0, 0, 0},{1, 1, 0, 0},{0, 1, 0, 0},{0, 1, 0, 0}}, //L3
+        {{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 1, 0},{1, 1, 1, 0}}, //L4
+        {{0, 0, 0, 0},{0, 1, 0, 0},{0, 1, 0, 0},{1, 1, 0, 0}}, //J1
+        {{0, 0, 0, 0},{0, 0, 0, 0},{1, 0, 0, 0},{1, 1, 1, 0}}, //J2
         {{0, 0, 0, 0},{1, 1, 0, 0},{1, 0, 0, 0},{1, 0, 0, 0}},
         {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 0},{0, 0, 1, 0}},
         {{0, 0, 0, 0},{0, 0, 0, 0},{0, 1, 1, 0},{1, 1, 0, 0}},
@@ -79,19 +79,23 @@ public:
     {     
         while(checkBarrier(block.Pos_y + 1, block))
             block.Pos_y++;
+        cout << "y:" << block.Pos_y << ' ' << "x :" << block.Pos_x << '\n';
     }
     bool checkBarrier(int next_y, Block& block)
     {
+        cout << "*";
         bool stop = true;
         if (next_y > MapHeight)
             stop = false;
-        for (int j = 0; j < block_h; j++)
+            
+        for (int j = block_h-1; j >= 0; j--)
         {
-            if (stop) break;
+            if (!stop) break;
             for (int k = 0; k < block_w; k++)
             {
                 if (block.data[j][k] == 0) continue;
-                if (map[next_y - j][block.Pos_x + k] == 1)
+                if (next_y - (block_h - 1 - j) < 0) break;
+                if (map[next_y - (block_h - 1 - j)][block.Pos_x + k] == 1)
                 {
                     stop = false;
                     break;
@@ -107,7 +111,8 @@ public:
             for(int j = 0; j < block_w; j++)
             {
                 if (block.data[i][j] == 0) continue;
-                map[block.Pos_y - i][block.Pos_x + j] = 1;
+                if (block.Pos_y - i <= 0) continue;
+                map[block.Pos_y - (block_h - 1 - i)][block.Pos_x + j] = 1;
             }
         }
         clearLine();
@@ -169,6 +174,15 @@ int main()
             newblock.Pos_x += Move;
             Tetris.blockFall(newblock);
             Tetris.updateMap(newblock);
+            for (int i = 1; i <= h; i++)
+            {
+                for (int j = 1; j <= w; j++)
+                {
+                    cout << Tetris.map[i][j] << ' ';
+                }
+                cout << '\n';
+            }
+            cout << '\n';
         }
     }
     fstream final;

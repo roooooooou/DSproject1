@@ -33,7 +33,11 @@ public:
         {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 0, 0},{1, 1, 0, 0}},
         {{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0}}};
     string t[19] = { "T1","T2","T3","T4","L1","L2","L3","L4","J1","J2","J3","J4","S1","S2","Z1","Z2","I1","I2","O" };
-    Block(){}
+    Block(){
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                data[i][j] = 0;
+    }
     Block(string name, int x, int y) 
     {
         Pos_x = x; Pos_y = y;
@@ -64,7 +68,7 @@ public:
     int MapWidth, MapHeight;
     int** map;
     bool gameover = false;
-    Map() { MapWidth = 0; MapHeight = 0; **map = NULL; }
+    Map() { MapWidth = 0; MapHeight = 0; }
     Map(int H, int W) :MapWidth(W), MapHeight(H)
     {
         map = new int* [H+1];
@@ -106,14 +110,23 @@ public:
     }
     void updateMap(Block& block)
     {
-        for (int i = 0; i < block_h; i++)
+        for (int i = block_h - 1; i >= 0; i--)
         {
-            for(int j = 0; j < block_w; j++)
+            for (int j = 0; j < block_w; j++)
             {
-                if (block.data[i][j] == 0) continue;
-                if (block.Pos_y - i <= 0) continue;
-                map[block.Pos_y - (block_h - 1 - i)][block.Pos_x + j] = 1;
-            }
+                if (block.Pos_y - (block_h - 1 - i) <= 0)
+                {
+                    clearLine();
+                    blockFall(block);
+                    updateMap(block);
+                }
+                else 
+                {
+                    if (block.data[i][j] == 0) continue;
+                    map[block.Pos_y - (3 - i)][block.Pos_x + j] = 1;
+                    block.data[i][j] = 0;
+                }
+            }  
         }
         clearLine();
     }
@@ -146,25 +159,20 @@ public:
 };
 
 
-int main()
+int main(int argc, char* argv[])
 {
     int w, h;
-    string filename; 
-    cin >> filename;
     fstream file;
     string testcase;
-
-    file.open(filename.c_str(), ios::in);
+    file.open("10806123_proj1.data", ios::in);
+    //file.open(argv[1], ios::in);
     file >> h >> w;
     Map Tetris(h, w);
     bool gameover = false;
     while (file >> testcase)
     {
         if (testcase == "End")
-        {
-            file.close();
             break;
-        }
         else
         {
             int StartPos, Move;
@@ -177,6 +185,7 @@ int main()
             Tetris.updateMap(newblock);
         }
     }
+    file.close();
     fstream final;
 
     final.open("final.final", ios::out);
@@ -186,7 +195,7 @@ int main()
             final << Tetris.map[i][j] << ' ';
         final << '\n';
     }  
-            
+    final.close();
     return 0;
 }
 
